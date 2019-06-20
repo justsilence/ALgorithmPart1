@@ -1,0 +1,49 @@
+/* *****************************************************************************
+ *  Name:
+ *  Date:
+ *  Description:
+ **************************************************************************** */
+
+import edu.princeton.cs.algs4.Stack;
+
+public class Board {
+    public Board(int[][] blocks) {
+
+    }
+
+    public int dimension() {
+
+    }
+
+    public int hamming() {
+
+    }
+
+    public int manhattan() {
+
+    }
+
+    public boolean isGoal() {
+
+    }
+
+    public Board twin() {
+
+    }
+
+    public boolean equals(Object y) {
+
+    }
+
+    public Iterable<Board> neighbors() {
+
+    }
+
+    public String toString() {
+
+    }
+
+    public static void main(String[] args) {
+
+    }
+}
