@@ -20,7 +20,7 @@ public class FastCollinearPoints {
             Point[] slopeOrderedPoints = sortedPoints.clone();
             Arrays.sort(slopeOrderedPoints, point.slopeOrder());
             int i = 0;
-            double prevSlope = point.slopeTo(point);
+            double prevSlope = Double.NEGATIVE_INFINITY;
 
             for (int j = 1; j < slopeOrderedPoints.length; j++) {
                 Point currPoint = slopeOrderedPoints[j];
