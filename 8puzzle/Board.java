@@ -58,20 +58,17 @@ public class Board {
 
     public Board twin() {
         int[][] copiedBlocks = copyBlocks(board);
-        int x = -1;
-        int y = -1;
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (j + 1 < dimension && board[i][j] != 0 && board[i][j + 1] != 0) {
-                    x = i;
-                    y = j;
+                    int tmp = copiedBlocks[i][j];
+                    copiedBlocks[i][j] = copiedBlocks[i][j + 1];
+                    copiedBlocks[i][j + 1] = tmp;
+                    return new Board(copiedBlocks);
                 }
             }
         }
-        int tmp = copiedBlocks[x][y];
-        copiedBlocks[x][y] = copiedBlocks[x][y + 1];
-        copiedBlocks[x][y + 1] = tmp;
-        return new Board(copiedBlocks);
+        return null;
     }
 
     public boolean equals(Object y) {
@@ -85,38 +82,43 @@ public class Board {
 
     public Iterable<Board> neighbors() {
         Queue<Board> queue = new Queue<>();
-        int x = -1;
-        int y = -1;
-        for (int i = 0; i < dimension; i ++) {
-            for (int j = 0; j < dimension; j++) {
-                if (board[i][j] == 0) {
-                    x = i;
-                    y = j;
-                    break;
-                }
-            }
-        }
+        int x = 0;
+        int y = 0;
+
         int[][] copiedBlocks = copyBlocks(board);
+        int[] pos = getBlankPosition(copiedBlocks);
+        if (pos != null) {
+            x = pos[0];
+            y = pos[1];
+        }
         if (x - 1 >= 0) {
             copiedBlocks[x][y] = copiedBlocks[x - 1][y];
+            copiedBlocks[x - 1][y] = 0;
             queue.enqueue(new Board(copiedBlocks));
             copiedBlocks[x - 1][y] = copiedBlocks[x][y];
+            copiedBlocks[x][y] = 0;
         }
 
         if (x + 1 < dimension) {
             copiedBlocks[x][y] = copiedBlocks[x + 1][y];
+            copiedBlocks[x + 1][y] = 0;
             queue.enqueue(new Board(copiedBlocks));
             copiedBlocks[x + 1][y] = copiedBlocks[x][y];
+            copiedBlocks[x][y] = 0;
         }
         if (y - 1 >= 0) {
             copiedBlocks[x][y] = copiedBlocks[x][y - 1];
+            copiedBlocks[x][y - 1] = 0;
             queue.enqueue(new Board(copiedBlocks));
             copiedBlocks[x][y - 1] = copiedBlocks[x][y];
+            copiedBlocks[x][y] = 0;
         }
         if (y + 1 < dimension) {
             copiedBlocks[x][y] = copiedBlocks[x][y + 1];
+            copiedBlocks[x][y + 1] = 0;
             queue.enqueue(new Board(copiedBlocks));
             copiedBlocks[x][y + 1] = copiedBlocks[x][y];
+            copiedBlocks[x][y] = 0;
         }
         return queue;
     }
@@ -136,11 +138,26 @@ public class Board {
     private int[][] copyBlocks(int[][] blocks) {
         int[][] copiedBlocks = new int[dimension][dimension];
         for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; i < blocks[i].length; j++) {
+            for (int j = 0; j < blocks[i].length; j++) {
                 copiedBlocks[i][j] = blocks[i][j];
             }
         }
         return copiedBlocks;
+    }
+
+    private int[] getBlankPosition(int[][] blocks) {
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < dimension; i ++) {
+            for (int j = 0; j < dimension; j++) {
+                if (blocks[i][j] == 0) {
+                    x = i;
+                    y = j;
+                    return new int[]{x, y};
+                }
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) {
