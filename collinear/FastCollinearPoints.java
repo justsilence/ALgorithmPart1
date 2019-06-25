@@ -20,17 +20,16 @@ public class FastCollinearPoints {
             Point[] slopeOrderedPoints = sortedPoints.clone();
             Arrays.sort(slopeOrderedPoints, point.slopeOrder());
             int i = 0;
-            double prevSlope = Double.NEGATIVE_INFINITY;
-            for (int j = 0; j < slopeOrderedPoints.length; j++) {
-                if (slopeOrderedPoints[j].equals(point))
-                    continue;
+            double prevSlope = point.slopeTo(point);
+
+            for (int j = 1; j < slopeOrderedPoints.length; j++) {
                 Point currPoint = slopeOrderedPoints[j];
                 double currSlope = point.slopeTo(currPoint);
                 if (Double.compare(prevSlope, currSlope) != 0) {
+                    prevSlope = currSlope;
                     if (point.compareTo(slopeOrderedPoints[i]) <= 0) {
                         if (j - i >= 3) {
                             lineSegments.add(new LineSegment(point, slopeOrderedPoints[j - 1]));
-
                         }
                     }
                     i = j;
@@ -41,7 +40,6 @@ public class FastCollinearPoints {
                         }
                     }
                 }
-                prevSlope = currSlope;
             }
         }
     }
