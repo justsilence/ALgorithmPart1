@@ -10,9 +10,6 @@ import edu.princeton.cs.algs4.Queue;
 import java.util.Arrays;
 
 public class Board {
-    // 0 means this position is empty.
-    private static final int[][] GOAL = {{1,2,3}, {4,5,6}, {7,8,0}};
-
     private int[][] board;
 
     private int dimension;
@@ -28,27 +25,29 @@ public class Board {
 
     public int hamming() {
         int result = 0;
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                if (board[i][j] != 0 && board[i][j] != GOAL[i][j]) {
-                    result++;
+            for (int i = 0; i < dimension; i++) {
+                for (int j = 0; j < dimension; j++) {
+                    int expected = (i * dimension + j + 1);
+                    if (board[i][j] != 0 && board[i][j] != expected) {
+                        result++;
+                    }
                 }
             }
-        }
         return result;
     }
 
     public int manhattan() {
         int result = 0;
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                if (board[i][j] != 0 && board[i][j] != GOAL[i][j]) {
-                    int x = (board[i][j] - 1) / dimension;
-                    int y = (board[i][j] - 1) % dimension;
-                    result += (Math.abs(x - i) + Math.abs(y - j));
+            for (int i = 0; i < dimension; i++) {
+                for (int j = 0; j < dimension; j++) {
+                    int expected = (i * dimension + j + 1);
+                    if (board[i][j] != 0 && board[i][j] != expected) {
+                        int x = (board[i][j] - 1) / dimension;
+                        int y = (board[i][j] - 1) % dimension;
+                        result += (Math.abs(x - i) + Math.abs(y - j));
+                    }
                 }
             }
-        }
         return result;
     }
 
@@ -87,7 +86,7 @@ public class Board {
 
         int[][] copiedBlocks = copyBlocks(board);
         int[] pos = getBlankPosition(copiedBlocks);
-        if (pos != null) {
+        if (pos[0] != -1 && pos[1] != -1) {
             x = pos[0];
             y = pos[1];
         }
@@ -137,8 +136,8 @@ public class Board {
 
     private int[][] copyBlocks(int[][] blocks) {
         int[][] copiedBlocks = new int[dimension][dimension];
-        for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; j < blocks[i].length; j++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 copiedBlocks[i][j] = blocks[i][j];
             }
         }
@@ -146,9 +145,9 @@ public class Board {
     }
 
     private int[] getBlankPosition(int[][] blocks) {
-        int x = 0;
-        int y = 0;
-        for (int i = 0; i < dimension; i ++) {
+        int x = -1;
+        int y = -1;
+        for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (blocks[i][j] == 0) {
                     x = i;
@@ -157,7 +156,7 @@ public class Board {
                 }
             }
         }
-        return null;
+        return new int[]{x, y};
     }
 
     public static void main(String[] args) {
