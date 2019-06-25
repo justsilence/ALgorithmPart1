@@ -19,12 +19,7 @@ public class Board {
 
     public Board(int[][] blocks) {
         dimension = blocks.length;
-        board = new int[dimension][dimension];
-        for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; i < blocks[i].length; j++) {
-                board[i][j] = blocks[i][j];
-            }
-        }
+        board = copyBlocks(blocks);
     }
 
     public int dimension() {
@@ -48,15 +43,9 @@ public class Board {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (board[i][j] != 0 && board[i][j] != GOAL[i][j]) {
-                    int x = board[i][j] / dimension;
-                    int y = board[i][j] % dimension;
-                    if (board[i][j] == 3) {
-                        result += i + Math.abs(2 - j);
-                    } else if (board[i][j] == 6) {
-                        result += Math.abs(i - 1) + Math.abs(2 - j);
-                    } else {
-                        result += Math.abs(x - i) + Math.abs(y - j - 1);
-                    }
+                    int x = (board[i][j] - 1) / dimension;
+                    int y = (board[i][j] - 1) % dimension;
+                    result += (Math.abs(x - i) + Math.abs(y - j));
                 }
             }
         }
@@ -93,7 +82,7 @@ public class Board {
         if (this.dimension() != b.dimension()) return false;
         return Arrays.deepEquals(this.board, b.board);
     }
-    
+
     public Iterable<Board> neighbors() {
         Queue<Board> queue = new Queue<>();
         int x = -1;
