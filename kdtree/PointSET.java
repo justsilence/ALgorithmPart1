@@ -60,7 +60,7 @@ public class PointSET {
         double minDistance = Double.MAX_VALUE;
         for (Point2D q : points) {
             double currDistance = q.distanceTo(p);
-            if (minDistance < currDistance) {
+            if (minDistance > currDistance) {
                 minDistance = currDistance;
                 nearestPoint = q;
             }
